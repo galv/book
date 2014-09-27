@@ -47,9 +47,17 @@
   });
 
   controller.connect();
-  var cube = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  var cube0 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  var cube1 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
   var cube2 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
-  cube2.position = new THREE.Vector3(2,2,2);
+  var cube3 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  var cube4 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  scene.add(cube0);
+  scene.add(cube1);
+  scene.add(cube2);
+  scene.add(cube3);
+  scene.add(cube4);
+  
   console.log(collisionMesh.position)
   //Repeat loop / update
   controller.on('frame', function(frame) {
@@ -59,9 +67,16 @@
     }
     hand = frame.hands[0];
     handMesh = hand.data('riggedHand.mesh');
-    position = handMesh.scenePosition(hand.fingers[1].stabilizedTipPosition,cube.position);
+    position0 = handMesh.scenePosition(hand.fingers[0].stabilizedTipPosition,cube0.position);
+    position1 = handMesh.scenePosition(hand.fingers[1].stabilizedTipPosition,cube1.position);
+    position2 = handMesh.scenePosition(hand.fingers[2].stabilizedTipPosition,cube2.position);
+    position3 = handMesh.scenePosition(hand.fingers[3].stabilizedTipPosition,cube3.position);
+    position4 = handMesh.scenePosition(hand.fingers[4].stabilizedTipPosition,cube4.position);
+    
+    
     length = hand.fingers.length;
-    console.log(position);/*
+    /*
+
     for (var index = 0; index < length; index++) {
 	var positionArray = hand.fingers[index].stabilizedTipPosition;
 	var cubeOrigin = new THREE.Vector3(positionArray[0], positionArray[1], 
