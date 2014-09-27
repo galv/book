@@ -7,21 +7,15 @@
   });
 
   gui.add(scope, 'x', -Math.PI, Math.PI);
-
   gui.add(scope, 'y', -Math.PI, Math.PI);
-
   gui.addColor(scope, 'color');
-
   gui.add(scope, 'rate', 0, 10);
-
   document.getElementById('guiContainer').appendChild(gui.domElement);
 
   extraOutput = document.createElement('div');
-
   extraOutput.id = 'extraOutput';
 
   extraOutput.style.paddingTop = '1.2em';
-
   extraOutput.style.color = 'white';
 
   document.getElementById('guiContainer').appendChild(extraOutput);
@@ -52,7 +46,7 @@
   });
 
   controller.connect();
-
+  //The looping/update code.
   controller.on('frame', function(frame) {
     var hand, handMesh, offsetDown, offsetForward, pos;
     if (!frame.hands[0]) {
@@ -60,7 +54,9 @@
     }
     hand = frame.hands[0];
     handMesh = hand.data('riggedHand.mesh');
+    //if intersectionb etween two or more fingers and object
     if (hand.pinchStrength > 0.5) {
+	// do math to change the position
       pos = Leap.vec3.clone(hand.palmPosition);
       offsetDown = Leap.vec3.clone(hand.palmNormal);
       Leap.vec3.multiply(offsetDown, offsetDown, [30, 30, 30]);
@@ -74,14 +70,4 @@
       return num.toPrecision(2);
     });
   });
-
-  document.body.onkeydown = function(e) {
-    switch (e.which) {
-      case 32:
-        return scope.pause();
-      default:
-        return console.log("unbound keycode: " + e.which);
-    }
-  };
-
 }).call(this);
