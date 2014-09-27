@@ -61,21 +61,35 @@
     }
     hand = frame.hands[0];
     handMesh = hand.data('riggedHand.mesh');
-    /*
-    for (var index = 0; index < hand.fingers.length(); index++) {
-	var positionArray = frame.hands[index].stabilizedTipPosition;
+    length = hand.fingers.length;
+    console.log(length);
+    
+    for (var index = 0; index < length; index++) {
+	//console.log(index);
+	var positionArray = hand.fingers[index].stabilizedTipPosition;
+	//console.log(positionArray);
 	var position = new THREE.Vector3(positionArray[0], positionArray[1], 
 					 positionArray[2]);
-	var directionArray = frame.hands[index].direction;
-	var direction = new THREE.Vector3(directionArray[0], directionArray[1], directionArray[2]);
-	
-	var ray = new THREE.RayCaster(position, direction.clone().normalize());
-	var collisionResults = ray.intersectObjects(collidableMeshList);
-	if (collisionResults > 0 && collisionResults[0].distance < directionVector.length()) {
+	//console.log(position);
+	var directionArray = hand.fingers[index].direction;
+	//console.log(directionArray);
+	var direction = new THREE.Vector3(directionArray[0], directionArray[1], 
+					  directionArray[2]);
+	console.log("Original");
+	console.log(direction);
+	console.log(direction.clone().normalize());
+	var ray_some = new THREE.Ray( position, direction);
+	console.log(ray_some);
+	//var ray = new THREE.RayCaster(position, (direction.clone()).normalize());
+		console.log(ray);
+		//var collisionResults = ray.intersectObjects(collidableMeshList);
+		//collisionResults = [2];
+	//	console.log("Post collision");
+		if (collisionResults.length > 0 && collisonResults[0].distance < directionVector.length()) {
 	    console.log("Collision");
 	}
-	}*/
-
+	}
+   
     if (hand.pinchStrength > 0.5) {
       pos = Leap.vec3.clone(hand.palmPosition);
       offsetDown = Leap.vec3.clone(hand.palmNormal);

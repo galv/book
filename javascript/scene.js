@@ -59,7 +59,7 @@
   light2.position.set(0, -1, 0);
 
   scene.add(light2);
-
+  console.log("Scene finished");
   render = function() {
     if (!paused) {
       window.scope.x += scope.rate * 0.004;
@@ -69,7 +69,7 @@
     renderer.render(scene, camera);
     return requestAnimationFrame(render);
   };
-
+  
   render();
 
 }).call(this);
