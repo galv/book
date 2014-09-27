@@ -53,6 +53,7 @@
 
   controller.connect();
 
+  //Repeat loop / update
   controller.on('frame', function(frame) {
     var hand, handMesh, offsetDown, offsetForward, pos;
     if (!frame.hands[0]) {
@@ -60,6 +61,21 @@
     }
     hand = frame.hands[0];
     handMesh = hand.data('riggedHand.mesh');
+    /*
+    for (var index = 0; index < hand.fingers.length(); index++) {
+	var positionArray = frame.hands[index].stabilizedTipPosition;
+	var position = new THREE.Vector3(positionArray[0], positionArray[1], 
+					 positionArray[2]);
+	var directionArray = frame.hands[index].direction;
+	var direction = new THREE.Vector3(directionArray[0], directionArray[1], directionArray[2]);
+	
+	var ray = new THREE.RayCaster(position, direction.clone().normalize());
+	var collisionResults = ray.intersectObjects(collidableMeshList);
+	if (collisionResults > 0 && collisionResults[0].distance < directionVector.length()) {
+	    console.log("Collision");
+	}
+	}*/
+
     if (hand.pinchStrength > 0.5) {
       pos = Leap.vec3.clone(hand.palmPosition);
       offsetDown = Leap.vec3.clone(hand.palmNormal);
@@ -70,7 +86,7 @@
       Leap.vec3.add(pos, pos, offsetForward);
       handMesh.scenePosition(pos, scope.light1position);
     }
-    return extraOutput.innerHTML = scope.light1position.toArray().map(function(num) {
+    return extraOutput.innerHTML = hand.fingers[2].stabilizedTipPosition.map(function(num) {
       return num.toPrecision(2);
     });
   });

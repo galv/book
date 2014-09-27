@@ -37,11 +37,10 @@
     color: scope.color
   });
 
-  lightVisualizer = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 2, 5, 10, false), new THREE.MeshBasicMaterial(0x555555));
-
-  lightVisualizer.position = scope.light1position;
-
-  scene.add(lightVisualizer);
+  collisionMesh = new THREE.Mesh(new THREE.CubeGeometry(1,1,1), new THREE.MeshBasicMaterial(0x555555));
+  collisionMesh.position = scope.light1position;
+  scene.add(collisionMesh);
+  collidableMeshList = [collisionMesh];
 
   camera.position.fromArray([0, 3, 10]);
 

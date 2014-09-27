@@ -29,37 +29,15 @@
 
   document.body.appendChild(renderer.domElement);
 
-  geometry = new THREE.CubeGeometry(2, 2, 0.5);
+  material = new THREE.MeshPhongMaterial({
+    color: scope.color
+  });
 
   material = new THREE.MeshPhongMaterial({
     color: scope.color
   });
 
-  cube = new THREE.Mesh(geometry, material);
-
-  cube.position.set(2, 0, 0);
-
-  cube.receiveShadow = true;
-
-  scene.add(cube);
-
-  geometry = new THREE.CubeGeometry(2, 2, 0.5);
-
-  material = new THREE.MeshPhongMaterial({
-    color: scope.color
-  });
-
-  cube2 = new THREE.Mesh(geometry, material);
-
-  cube2.position.set(-2, 0, 0);
-
-  cube2.castShadow = true;
-
-  cube2.receiveShadow = true;
-
-  scene.add(cube2);
-
-  lightVisualizer = new THREE.Mesh(new THREE.SphereGeometry(0.2), new THREE.MeshBasicMaterial(0x555555));
+  lightVisualizer = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 2, 5, 10, false), new THREE.MeshBasicMaterial(0x555555));
 
   lightVisualizer.position = scope.light1position;
 
@@ -87,11 +65,7 @@
     if (!paused) {
       window.scope.x += scope.rate * 0.004;
       window.scope.y += scope.rate * 0.002;
-      cube2.rotation.x += scope.rate * 0.004;
-      cube2.rotation.y += scope.rate * 0.002;
     }
-    cube.rotation.x = window.scope.x;
-    cube.rotation.y = window.scope.y;
     material.color.setHex(scope.color);
     renderer.render(scene, camera);
     return requestAnimationFrame(render);
