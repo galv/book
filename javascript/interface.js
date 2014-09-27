@@ -46,13 +46,11 @@
     }
   });
 
-  controller.use('playback', {
-    recording: 'pinch-and-move-57fps.json.lz',
-    loop: false
-  });
-
   controller.connect();
-
+  var cube = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  var cube2 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  cube2.position = new THREE.Vector3(2,2,2);
+  console.log(collisionMesh.position)
   //Repeat loop / update
   controller.on('frame', function(frame) {
     var hand, handMesh, offsetDown, offsetForward, pos;
@@ -61,37 +59,25 @@
     }
     hand = frame.hands[0];
     handMesh = hand.data('riggedHand.mesh');
+    position = handMesh.scenePosition(hand.fingers[1].stabilizedTipPosition,cube.position);
     length = hand.fingers.length;
+    console.log(position);/*
     for (var index = 0; index < length; index++) {
 	var positionArray = hand.fingers[index].stabilizedTipPosition;
 	var cubeOrigin = new THREE.Vector3(positionArray[0], positionArray[1], 
 					 positionArray[2]);
-	
-	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
-	var cube = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), wireMaterial);
 	cube.position = cubeOrigin;
 	for (var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++) {
 	    var localVertex = cube.geometry.vertices[vertexIndex].clone();
 	    var globalVertex = localVertex.applyMatrix4(cube.matrix);
 	    var directionVector = globalVertex.sub(cube.position);
-	    console.log("inner for loop");
 	    var ray = new THREE.Raycaster( cubeOrigin, directionVector.clone().normalize() );
 	    var collisionResults = ray.intersectObjects( collidableMeshList );
-	    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
-		console.log(" Hit ");
+	    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ){
+		    console.log(" Hit ");
+      }
 	}
-    }
-   
-    if (hand.pinchStrength > 0.5) {
-      pos = Leap.vec3.clone(hand.palmPosition);
-      offsetDown = Leap.vec3.clone(hand.palmNormal);
-      Leap.vec3.multiply(offsetDown, offsetDown, [30, 30, 30]);
-      Leap.vec3.add(pos, pos, offsetDown);
-      offsetForward = Leap.vec3.clone(hand.direction);
-      Leap.vec3.multiply(offsetForward, offsetForward, [30, 30, 30]);
-      Leap.vec3.add(pos, pos, offsetForward);
-      handMesh.scenePosition(pos, scope.light1position);
-    }
+    }*/
     return extraOutput.innerHTML = hand.fingers[2].stabilizedTipPosition.map(function(num) {
       return num.toPrecision(2);
 	});
