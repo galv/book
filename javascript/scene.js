@@ -37,7 +37,7 @@
     color: scope.color
   });
 
-  collisionMesh = new THREE.Mesh(new THREE.CubeGeometry(1,1,1), new THREE.MeshBasicMaterial(0x555555));
+  collisionMesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshBasicMaterial(0x555555));
   collisionMesh.position = scope.light1position;
   scene.add(collisionMesh);
   collidableMeshList = [collisionMesh];
@@ -57,7 +57,9 @@
   light2 = new THREE.DirectionalLight(0xffffff, 0.5);
 
   light2.position.set(0, -1, 0);
-
+  //var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
+  //cube = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), wireMaterial);
+  //cubes = [new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2)];
   scene.add(light2);
   console.log("Scene finished");
   render = function() {

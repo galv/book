@@ -62,34 +62,18 @@
     hand = frame.hands[0];
     handMesh = hand.data('riggedHand.mesh');
     length = hand.fingers.length;
-    console.log(length);
-    
     for (var index = 0; index < length; index++) {
-	//console.log(index);
 	var positionArray = hand.fingers[index].stabilizedTipPosition;
-	//console.log(positionArray);
 	var position = new THREE.Vector3(positionArray[0], positionArray[1], 
 					 positionArray[2]);
-	//console.log(position);
 	var directionArray = hand.fingers[index].direction;
-	//console.log(directionArray);
 	var direction = new THREE.Vector3(directionArray[0], directionArray[1], 
 					  directionArray[2]);
-	console.log("Original");
-	console.log(direction);
-	console.log(direction.clone().normalize());
-	//var ray_some = new THREE.Ray( position, direction);
-	//console.log(ray_some);
-	console.log("pre ray");
-	var myRay = new THREE.RayCaster();
-	console.log(myRay);
+	var myRay = new THREE.Raycaster();
 	myRay.set(new THREE.Vector3(56.7411,146.936,142.265), new THREE.Vector3(-.415,.36,-1).normalize());
-	//console.log(myRay);
 	var collisionResults = myRay.intersectObjects(collidableMeshList);
 		if (collisionResults.length > 0 && collisonResults[0].distance < directionVector.length()) {
 	    console.log("Collision");
-		} else {
-		    console.log("No collision");
 		}
 	}
    

@@ -64,18 +64,23 @@
     length = hand.fingers.length;
     for (var index = 0; index < length; index++) {
 	var positionArray = hand.fingers[index].stabilizedTipPosition;
-	var position = new THREE.Vector3(positionArray[0], positionArray[1], 
+	var cubeOrigin = new THREE.Vector3(positionArray[0], positionArray[1], 
 					 positionArray[2]);
-	var directionArray = hand.fingers[index].direction;
-	var direction = new THREE.Vector3(directionArray[0], directionArray[1], 
-					  directionArray[2]);
-	var myRay = new THREE.Raycaster();
-	myRay.set(new THREE.Vector3(56.7411,146.936,142.265), new THREE.Vector3(-.415,.36,-1).normalize());
-	var collisionResults = myRay.intersectObjects(collidableMeshList);
-		if (collisionResults.length > 0 && collisonResults[0].distance < directionVector.length()) {
-	    console.log("Collision");
-		}
+	
+	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
+	var cube = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), wireMaterial);
+	cube.position = cubeOrigin;
+	for (var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++) {
+	    var localVertex = cube.geometry.vertices[vertexIndex].clone();
+	    var globalVertex = localVertex.applyMatrix4(cube.matrix);
+	    var directionVector = globalVertex.sub(cube.position);
+	    console.log("inner for loop");
+	    var ray = new THREE.Raycaster( cubeOrigin, directionVector.clone().normalize() );
+	    var collisionResults = ray.intersectObjects( collidableMeshList );
+	    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
+		console.log(" Hit ");
 	}
+    }
    
     if (hand.pinchStrength > 0.5) {
       pos = Leap.vec3.clone(hand.palmPosition);
@@ -89,8 +94,8 @@
     }
     return extraOutput.innerHTML = hand.fingers[2].stabilizedTipPosition.map(function(num) {
       return num.toPrecision(2);
+	});
     });
-  });
 
   document.body.onkeydown = function(e) {
     switch (e.which) {
