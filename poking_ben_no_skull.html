@@ -216,7 +216,7 @@ var materials = [
 	scene.add(touchPt2);
 	
 	grab = true;
-/*  Load a file */
+/*  Load a file *//*
 var manager = new THREE.LoadingManager();
 				manager.onProgress = function ( item, loaded, total ) {
 
@@ -240,6 +240,7 @@ var manager = new THREE.LoadingManager();
 					scene.add( skull );
 
 				});
+*/
 
 	
 }
@@ -271,7 +272,7 @@ function update()
 	frameDisplay.innerHTML = '<p> Fingers' + currentFrame.fingers.length+'</p>';
 	var p1;
 	var p2;
-	var skull = scene.getObjectByName("skull");
+	
 	for (var i = 0; i < currentFrame.fingers.length; i++){
 		if(currentFrame.fingers[i].type == 1){
 			console.log(currentFrame.fingers[i].dipPosition);
@@ -296,12 +297,12 @@ function update()
 
 		p3.normalize();
 		var pos = new THREE.Vector3();
-		pos.addVectors(p3,skull.position);
-		skull.lookAt(pos);
+		pos.addVectors(p3,wall.position);
+		wall.lookAt(pos);
 
 		var p4 = p2.clone().add(p1.clone());
 		p4.divideScalar(2);
-		skull.position = p4;
+		wall.position = p4;
 /*
 		
 		var ref1 = new THREE.Vector3(1,0,0);
@@ -418,5 +419,3 @@ function findTransformation(p1, p2 , object){
 
 </body>
 </html>
-Status API Training Shop Blog About
-© 2014 GitHub, Inc. Terms Privacy Security Contact
