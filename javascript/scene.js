@@ -17,15 +17,15 @@
 
   window.scene = new THREE.Scene();
 
-  window.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  window.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 20000);
 
   renderer = new THREE.WebGLRenderer({
     antialias: true
   });
 
   renderer.setSize(window.innerWidth, window.innerHeight);
-
-  renderer.shadowMapEnabled = true;
+  window.camera.position.set(0,150,400);
+  window.camera.lookAt(scene.position);
 
   document.body.appendChild(renderer.domElement);
 
@@ -37,7 +37,7 @@
     color: scope.color
   });
 
-  collisionMesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshBasicMaterial(0x555555));
+  collisionMesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshBasicMaterial({color: 0x000000, side: THREE.Backside}));
   collisionMesh.position = scope.light1position;
   scene.add(collisionMesh);
   collidableMeshList = [collisionMesh];
@@ -45,22 +45,26 @@
   camera.position.fromArray([0, 3, 10]);
 
   camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-  light1 = new THREE.DirectionalLight(0xffffff, 3.5, 10);
-
-  light1.castShadow = true;
-
-  light1.position = scope.light1position;
-
-  scene.add(light1);
-
-  light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-
-  light2.position.set(0, -1, 0);
+  var light = new THREE.PointLight(0xffffff);
+  light.position.set(0,250,0);
+  scene.add(light);
   //var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
   //cube = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), wireMaterial);
   //cubes = [new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2)];
   scene.add(light2);
+
+  var floorMaterial = new THREE.MeshBasicMaterial( {color:0x444444, side:THREE.DoubleSide} );
+  var floorGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
+  var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+  floor.position.y = -10;
+  floor.rotation.x = Math.PI / 2;
+  scene.add(floor);
+
+  var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+  var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
+  var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+  scene.add(skyBox);
+
   console.log("Scene finished");
   render = function() {
     if (!paused) {

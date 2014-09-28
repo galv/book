@@ -48,17 +48,20 @@
   });
 
   controller.connect();
-  var cube0 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
-  var cube1 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
-  var cube2 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
-  var cube3 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
-  var cube4 = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
-  scene.add(cube0);
-  scene.add(cube1);
-  scene.add(cube2);
-  scene.add(cube3);
-  scene.add(cube4);
-  
+  var cube0 = new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  var cube1 = new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  //var cube2 = new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  //var cube3 = new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  //var cube4 = new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5), new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe:true } ));
+  //scene.add(cube0);
+  //scene.add(cube1);
+  //scene.add(cube2);
+  //scene.add(cube3);
+  //scene.add(cube4);
+  var contactCubes = [cube0,cube1];
+  var attached = [];
+  var grab = false;
+  var wait = 0; 
   console.log(collisionMesh.position)
   //Repeat loop / update
   controller.on('frame', function(frame) {
@@ -68,36 +71,68 @@
     }
     hand = frame.hands[0];
     handMesh = hand.data('riggedHand.mesh');
-    position0 = handMesh.scenePosition(hand.fingers[0].stabilizedTipPosition,cube0.position);
-    position1 = handMesh.scenePosition(hand.fingers[1].stabilizedTipPosition,cube1.position);
-    position2 = handMesh.scenePosition(hand.fingers[2].stabilizedTipPosition,cube2.position);
-    position3 = handMesh.scenePosition(hand.fingers[3].stabilizedTipPosition,cube3.position);
-    position4 = handMesh.scenePosition(hand.fingers[4].stabilizedTipPosition,cube4.position);
-    
-    
+    var position0 = handMesh.scenePosition(hand.fingers[0].stabilizedTipPosition,cube0.position);
+    var position1 = handMesh.scenePosition(hand.fingers[1].stabilizedTipPosition,cube1.position);
+    //var position2 = handMesh.scenePosition(hand.fingers[2].stabilizedTipPosition,cube2.position);
+    //var position3 = handMesh.scenePosition(hand.fingers[3].stabilizedTipPosition,cube3.position);
+    //var position4 = handMesh.scenePosition(hand.fingers[4].stabilizedTipPosition,cube4.position);
     length = hand.fingers.length;
-    /*
-
-    for (var index = 0; index < length; index++) {
-	var positionArray = hand.fingers[index].stabilizedTipPosition;
-	var cubeOrigin = new THREE.Vector3(positionArray[0], positionArray[1], 
-					 positionArray[2]);
-	cube.position = cubeOrigin;
-	for (var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++) {
-	    var localVertex = cube.geometry.vertices[vertexIndex].clone();
-	    var globalVertex = localVertex.applyMatrix4(cube.matrix);
-	    var directionVector = globalVertex.sub(cube.position);
-	    var ray = new THREE.Raycaster( cubeOrigin, directionVector.clone().normalize() );
-	    var collisionResults = ray.intersectObjects( collidableMeshList );
-	    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ){
-		    console.log(" Hit ");
+    for (var index = 0; index < contactCubes.length; index++) {
+      cube = contactCubes[index];
+      for (var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++) {
+        var localVertex = cube.geometry.vertices[vertexIndex].clone();
+        var globalVertex = localVertex.applyMatrix4(cube.matrix);
+        var directionVector = globalVertex.sub(cube.position);
+        var ray = new THREE.Raycaster( cube.position.clone(), directionVector.clone().normalize() );
+        var collisionResults = ray.intersectObjects( collidableMeshList );
+        if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() && wait == 0 ){
+          if(attached.indexOf(index) == -1){
+            attached.push(index);
+          }
+          console.log(" Hit "+attached);
+        }
+        /*else{
+          var ind = attached.indexOf(index);
+          if(ind != -1){
+            attached.splice(ind,1);
+            relaxedGrip[index] = 1;
+            console.log("removed" + collisionResults.length);
+          }
+        }*/
+        if(attached.length >= 2){
+          grab = true;
+          console.log("grabbed");
+        } 
+        else 
+          grab = false;
+          if (wait > 0)
+            wait --;
       }
-	}
-    }*/
+      console.log(wait);
+    }
+    var position2 = position1.clone().sub(position0.clone());
+    if(position2.length() > 1.2 && grab){
+        grab=false;
+        console.log(grab);
+        attached = [];
+        console.log(attached);
+        wait = 20;
+      }
+    if (frame.fingers.length > 0 && grab == true){
+      console.log(position2.length());
+      position2.normalize();
+      var pos = new THREE.Vector3();
+      pos.addVectors(position2, collisionMesh.position);
+      collisionMesh.lookAt(pos);
+
+      var position3 = position1.clone().add(position0.clone());
+      position3.divideScalar(2);
+      collisionMesh.position = position3;
+    }
     return extraOutput.innerHTML = hand.fingers[2].stabilizedTipPosition.map(function(num) {
-      return num.toPrecision(2);
-	});
-    });
+     return num.toPrecision(2);
+      });
+  });
 
   document.body.onkeydown = function(e) {
     switch (e.which) {
