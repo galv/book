@@ -69,7 +69,6 @@ var directionList = [];
 controller = new Leap.Controller();
 frameDisplay = document.getElementById('frameID');
 
-
 this.controller.on('connect', function(){
    setInterval(function(){
       var frame = controller.frame();
@@ -88,7 +87,9 @@ controller.connect();
 init();
 animate();
 
-// FUNCTIONS 		
+// FUNCTIONS 
+
+
 function init() 
 {
 	// SCENE
@@ -154,21 +155,43 @@ function init()
 	ControlCube2.position.set(0, 50.1,100);
 	scene.add( ControlCube2 );
 
+	
+var materials = [
+       new THREE.MeshBasicMaterial({
+           color: 0x9999ff
+       }),
+       new THREE.MeshBasicMaterial({
+           color: 0x444444
+       }),
+       new THREE.MeshBasicMaterial({
+           color: 0xff0000
+       }),
+       new THREE.MeshBasicMaterial({
+           color: 0x999990
+       }),
+       new THREE.MeshBasicMaterial({
+           color: 0x443414
+       }),
+       new THREE.MeshBasicMaterial({
+           color: 0x8888ff
+       }),
+    ];
 
 
 	
-	var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
+	var wallGeometry = new THREE.CubeGeometry( 100, 100, 100, 1, 1, 1 );
 	var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
 	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 	
-	var wall = new THREE.Mesh(wallGeometry, wallMaterial);
-	wall.position.set(100, 50, -100);
+	//wall = new THREE.Mesh(wallGeometry, wallMaterial);
+	wall = new THREE.Mesh(wallGeometry, new THREE.MeshFaceMaterial( materials ) );
+	wall.position.set(50, 50, -50);
 	scene.add(wall);
 	collidableMeshList.push(wall);
-	var wall = new THREE.Mesh(wallGeometry, wireMaterial);
-	wall.position.set(100, 50, -100);
-	scene.add(wall);
-	
+	//var wall = new THREE.Mesh(wallGeometry, wireMaterial);
+	//wall.position.set(100, 50, -100);
+	//scene.add(wall);
+	/*
 	var wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
 	wall2.position.set(-150, 50, 0);
 	wall2.rotation.y = 3.14159 / 2;
@@ -178,12 +201,22 @@ function init()
 	wall2.position.set(-150, 50, 0);
 	wall2.rotation.y = 3.14159 / 2;
 	scene.add(wall2);
+	*/
 	
 	var collideGeometry = new THREE.CircleGeometry(2,64);
 	var collide_material = new THREE.MeshBasicMaterial({color: 0xff0000 });
 	 collision_point = new THREE.Mesh(collideGeometry, collide_material);
-	scene.add(collision_point);
-	MovingCube.matrixAutoUpdate = true;		
+	//scene.add(collision_point);
+	//MovingCube.matrixAutoUpdate = true;
+
+	touchPt1 = new THREE.Mesh(collideGeometry, collide_material);
+	touchPt2 = new THREE.Mesh(collideGeometry, collide_material);
+	scene.add(touchPt1);
+	scene.add(touchPt2);
+	
+	grab = true;
+
+	
 }
 
 function clearText()
@@ -207,29 +240,66 @@ function update()
 	var rotateAngle = Math.PI / 2 * delta;   // pi/2 radians (90 degrees) per second
 
 	currentFrame = controller.frame(1);
-	hand = currentFrame.hands[0];
-	handMesh = hand.data('riggedHand.mesh');
-
-	appendText('Hands' + currentFrame.hands.length);
-	appendText('Pointables ' + currentFrame.pointables.length);
+	
+	//appendText('Hands' + currentFrame.hands.length);
+	//appendText('Pointables ' + currentFrame.pointables.length);
 	frameDisplay.innerHTML = '<p> Fingers' + currentFrame.fingers.length+'</p>';
+	var p1;
+	var p2;
 	for (var i = 0; i < currentFrame.fingers.length; i++){
 		if(currentFrame.fingers[i].type == 1){
 			console.log(currentFrame.fingers[i].dipPosition);
 			frameDisplay.innerHTML = '<p> Finger coords' + currentFrame.fingers[i].dipPosition+'</p>';
-			var position0 = handMesh.scenePosition(currentFrame.fingers[i].stabilizedTipPosition,cube0.position);
-			/*
 			ControlCube.position.x = currentFrame.fingers[i].dipPosition[0];
 			ControlCube.position.y = currentFrame.fingers[i].dipPosition[1];
 			ControlCube.position.z = currentFrame.fingers[i].dipPosition[2];
-			*/
+			p1 = new THREE.Vector3(currentFrame.fingers[i].dipPosition[0],currentFrame.fingers[i].dipPosition[1],currentFrame.fingers[i].dipPosition[2])
 		}
 		if(currentFrame.fingers[i].type == 0){
 			console.log(currentFrame.fingers[i].dipPosition);
 			frameDisplay.innerHTML = '<p> Finger coords' + currentFrame.fingers[i].dipPosition+'</p>';
-			var position0 = handMesh.scenePosition(currentFrame.fingers[i].stabilizedTipPosition,cube1.position);
+			ControlCube2.position.x = currentFrame.fingers[i].dipPosition[0];
+			ControlCube2.position.y = currentFrame.fingers[i].dipPosition[1];
+			ControlCube2.position.z = currentFrame.fingers[i].dipPosition[2];
+			p2 = new THREE.Vector3(currentFrame.fingers[i].dipPosition[0],currentFrame.fingers[i].dipPosition[1],currentFrame.fingers[i].dipPosition[2])
 		}
 	}
+	
+	if (currentFrame.fingers.length > 0 && grab == true){
+		var p3 = p2.clone().sub(p1.clone());
+
+		p3.normalize();
+		var pos = new THREE.Vector3();
+		pos.addVectors(p3, wall.position);
+		wall.lookAt(pos);
+
+		var p4 = p2.clone().add(p1.clone());
+		p4.divideScalar(2);
+		wall.position = p4;
+/*
+		
+		var ref1 = new THREE.Vector3(1,0,0);
+		var ref2 = new THREE.Vector3(1,1,0);
+		ref2.normalize();
+		var axis = p3.cross(ref1);
+		axis.normalize();
+		var quaternion = new THREE.Quaternion();
+		quaternion = quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(0,1,0));
+		*/
+
+		/*
+  		p2.normalize();
+  		var quat = new THREE.Quaternion().setFromUnitVectors(p1, p2);
+  		translation = new THREE.Vector3(0,0,0);
+  		scale = new THREE.Vector3(1,1,1);
+  		var matrix = new THREE.Matrix4().compose(translation, quat, scale);
+  		MovingCube.matrixAutoUpdate = false;
+  		MovingCube.quaternion = quat;
+  		MovingCube.matrixAutoUpdate = true;
+  		*/
+	}
+	
+	
 
 	
 	
@@ -287,12 +357,19 @@ function update()
 	
 }
 
+
+
+
+
 function render() 
 {
 	renderer.render( scene, camera );
 }
 
-function findTransformation(p1_old, p1_new, p2_old, p2_new, object){
+
+
+
+function findTransformation(p1, p2 , object){
 	var v_new = p2_new.sub(p1_new);
 	var v_old = p2_old.sub(p2_new);
 	v_new.normalize();
@@ -315,3 +392,5 @@ function findTransformation(p1_old, p1_new, p2_old, p2_new, object){
 
 </body>
 </html>
+Status API Training Shop Blog About
+© 2014 GitHub, Inc. Terms Privacy Security Contact
