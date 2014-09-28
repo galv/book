@@ -37,7 +37,29 @@
     color: scope.color
   });
   
-  collisionMesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshBasicMaterial({color: 0x000000, side: THREE.Backside}));
+  var materials = [
+       new THREE.MeshBasicMaterial({
+           color: 0x8822ff
+       }),
+       new THREE.MeshBasicMaterial({
+           map: THREE.ImageUtils.loadTexture('static/bigredhacks.png')
+       }),
+       new THREE.MeshBasicMaterial({
+           map: THREE.ImageUtils.loadTexture('static/75K_F9Ck.png')
+       }),
+       new THREE.MeshBasicMaterial({
+           map: THREE.ImageUtils.loadTexture('static/Nyan_cat_250px_frame.PNG')
+       }),
+       new THREE.MeshBasicMaterial({
+           map: THREE.ImageUtils.loadTexture('static/art-marilyn-470x469.jpg')
+       }),
+       new THREE.MeshBasicMaterial({
+           map: THREE.ImageUtils.loadTexture('static/gandalf.jpg')
+
+       }),
+  ];
+
+  collisionMesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshFaceMaterial(materials));
   collisionMesh.position = scope.light1position;
   scene.add(collisionMesh);
   collidableMeshList = [collisionMesh];
