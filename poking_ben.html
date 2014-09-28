@@ -17,6 +17,7 @@
 <script src="js/THREEx.FullScreen.js"></script>
 <script src="js/THREEx.WindowResize.js"></script>
 <script src="http://js.leapmotion.com/leap-0.6.2.min.js"></script>
+<script src="http://threejs.org/examples/js/loaders/OBJLoader.js"></script>
 
 <!-- jQuery code to display an information button and box when clicked. -->
 <script src="js/jquery-1.9.1.js"></script>
@@ -179,7 +180,7 @@ var materials = [
 
 
 	
-	var wallGeometry = new THREE.CubeGeometry( 100, 100, 100, 1, 1, 1 );
+	var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
 	var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
 	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 	
@@ -215,6 +216,30 @@ var materials = [
 	scene.add(touchPt2);
 	
 	grab = true;
+/*  Load a file */
+var manager = new THREE.LoadingManager();
+				manager.onProgress = function ( item, loaded, total ) {
+
+					console.log( item, loaded, total );
+
+				};
+	var loader = new THREE.OBJLoader(manager);
+				loader.load( 'skull.obj', function ( skull ) {
+
+					skull.traverse( function ( child ) {
+
+						if ( child instanceof THREE.Mesh ) {
+
+							//child.material.map = texture;
+
+						}
+
+					} );
+					skull.scale = new THREE.Vector3( 20, 20, 20 );
+					skull.name = "skull";
+					scene.add( skull );
+
+				});
 
 	
 }
@@ -246,6 +271,7 @@ function update()
 	frameDisplay.innerHTML = '<p> Fingers' + currentFrame.fingers.length+'</p>';
 	var p1;
 	var p2;
+	var skull = scene.getObjectByName("skull");
 	for (var i = 0; i < currentFrame.fingers.length; i++){
 		if(currentFrame.fingers[i].type == 1){
 			console.log(currentFrame.fingers[i].dipPosition);
@@ -270,12 +296,12 @@ function update()
 
 		p3.normalize();
 		var pos = new THREE.Vector3();
-		pos.addVectors(p3, wall.position);
-		wall.lookAt(pos);
+		pos.addVectors(p3,skull.position);
+		skull.lookAt(pos);
 
 		var p4 = p2.clone().add(p1.clone());
 		p4.divideScalar(2);
-		wall.position = p4;
+		skull.position = p4;
 /*
 		
 		var ref1 = new THREE.Vector3(1,0,0);
