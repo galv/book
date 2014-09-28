@@ -17,12 +17,8 @@
 <script src="js/THREEx.FullScreen.js"></script>
 <script src="js/THREEx.WindowResize.js"></script>
 <script src="http://js.leapmotion.com/leap-0.6.2.min.js"></script>
-<<<<<<< HEAD
-<script src="js/OBJLoader.js"></script>
-=======
 <script src="http://threejs.org/examples/js/loaders/OBJLoader.js"></script>
 
->>>>>>> 463665f428796e5172d8f725c751064c5789da83
 <!-- jQuery code to display an information button and box when clicked. -->
 <script src="js/jquery-1.9.1.js"></script>
 <script src="js/jquery-ui.js"></script>
@@ -163,19 +159,19 @@ function init()
 	
 var materials = [
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/gandalf.jpg')
+           color: 0x9999ff
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/bigredhacks.png')
+           color: 0x444444
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/75K_F9Ck.png')
+           color: 0xff0000
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/Nyan_cat_250px_frame.PNG')
+           color: 0x999990
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/art-marilyn-470x469.jpg')
+           color: 0x443414
        }),
        new THREE.MeshBasicMaterial({
            color: 0x8888ff
@@ -189,15 +185,9 @@ var materials = [
 	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 	
 	//wall = new THREE.Mesh(wallGeometry, wallMaterial);
-        var loader = new THREE.OBJLoader();
-        loader.load( 'static/cube.obj', function (object) {
-          object.name = "complex_object";
-          scene.add( object );
-        });
-	//wall = new THREE.Mesh(wallGeometry, new THREE.MeshFaceMaterial( materials ) );
-	//wall.position.set(50, 50, -50);
-	//scene.add(wall);
-        var wall = scene.getObjectByName("complex_object");
+	wall = new THREE.Mesh(wallGeometry, new THREE.MeshFaceMaterial( materials ) );
+	wall.position.set(50, 50, -50);
+	scene.add(wall);
 	collidableMeshList.push(wall);
 	//var wall = new THREE.Mesh(wallGeometry, wireMaterial);
 	//wall.position.set(100, 50, -100);

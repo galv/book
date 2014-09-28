@@ -1,9 +1,5 @@
-Move lights around a THREE.js scene.
+Pinch and investigate an object with leapmotion and 3.js. 
 
-Right now, only one light can be controlled.  A few things could be explored next:
- - Manipulate different objects, by focusing the closest one on pinch.
- - For handling close objects in constrained situations, use the mouse to select an object, and the hand to move it.
- <br/>This could be used also to manipulate different aspects of an object independently - such as rotation.
+Best used with a leap motion facing to the right (usb port to the left) and your left hand. 
 
-
-Recording made with the LeapJS [Recorder](http://developer.leapmotion.com/recorder).
+main files: poking_ben_no_skull and poking_ben_with_skull

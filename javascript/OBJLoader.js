@@ -425,6 +425,4 @@ THREE.OBJLoader.prototype = {
 
 	}
 
-
 }
-
