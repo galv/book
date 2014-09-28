@@ -185,10 +185,10 @@ var materials = [
 	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 	
 	//wall = new THREE.Mesh(wallGeometry, wallMaterial);
-	wall = new THREE.Mesh(wallGeometry, new THREE.MeshFaceMaterial( materials ) );
-	wall.position.set(50, 50, -50);
-	scene.add(wall);
-	collidableMeshList.push(wall);
+	//wall = new THREE.Mesh(wallGeometry, new THREE.MeshFaceMaterial( materials ) );
+	//wall.position.set(50, 50, -50);
+	//scene.add(wall);
+	//collidableMeshList.push(wall);
 	//var wall = new THREE.Mesh(wallGeometry, wireMaterial);
 	//wall.position.set(100, 50, -100);
 	//scene.add(wall);
@@ -224,8 +224,10 @@ var manager = new THREE.LoadingManager();
 
 				};
 	var loader = new THREE.OBJLoader(manager);
-				loader.load( 'skull.obj', function ( skull ) {
-
+				//airplane
+				loader.load( 'fluzeug.obj', function ( skull ) {
+					//skull 
+				//loader.load( 'skull.obj', function ( skull ) {
 					skull.traverse( function ( child ) {
 
 						if ( child instanceof THREE.Mesh ) {
@@ -274,7 +276,7 @@ function update()
 	var skull = scene.getObjectByName("skull");
 	for (var i = 0; i < currentFrame.fingers.length; i++){
 		if(currentFrame.fingers[i].type == 1){
-			console.log(currentFrame.fingers[i].dipPosition);
+			//console.log(currentFrame.fingers[i].dipPosition);
 			frameDisplay.innerHTML = '<p> Finger coords' + currentFrame.fingers[i].dipPosition+'</p>';
 			ControlCube.position.x = currentFrame.fingers[i].dipPosition[0];
 			ControlCube.position.y = currentFrame.fingers[i].dipPosition[1];
@@ -282,7 +284,7 @@ function update()
 			p1 = new THREE.Vector3(currentFrame.fingers[i].dipPosition[0],currentFrame.fingers[i].dipPosition[1],currentFrame.fingers[i].dipPosition[2])
 		}
 		if(currentFrame.fingers[i].type == 0){
-			console.log(currentFrame.fingers[i].dipPosition);
+			//console.log(currentFrame.fingers[i].dipPosition);
 			frameDisplay.innerHTML = '<p> Finger coords' + currentFrame.fingers[i].dipPosition+'</p>';
 			ControlCube2.position.x = currentFrame.fingers[i].dipPosition[0];
 			ControlCube2.position.y = currentFrame.fingers[i].dipPosition[1];
@@ -290,7 +292,26 @@ function update()
 			p2 = new THREE.Vector3(currentFrame.fingers[i].dipPosition[0],currentFrame.fingers[i].dipPosition[1],currentFrame.fingers[i].dipPosition[2])
 		}
 	}
+	/*
+	grab_dist_min = 40;
+	grab_dist_max = 70;
+	if (currentFrame.fingers.length > 0 ){
+		var finger_dist =  p2.clone().sub(p1.clone());
+		finger_sep = finger_dist.length();
+		console.log(finger_sep);
+		if (finger_sep < grab_dist_min){
+			grab = true;
+		}
+		if (finger_sep > grab_dist_max){
+			grab = false;
+		}
+	}
+	else{grab = false;}
+	console.log(grab);
+	*/
 	
+	//var finger_dist = (p2.clone().sub(p1.clone())).length;
+	//console.log(finger_dist);
 	if (currentFrame.fingers.length > 0 && grab == true){
 		var p3 = p2.clone().sub(p1.clone());
 

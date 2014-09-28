@@ -291,6 +291,21 @@ function update()
 			p2 = new THREE.Vector3(currentFrame.fingers[i].dipPosition[0],currentFrame.fingers[i].dipPosition[1],currentFrame.fingers[i].dipPosition[2])
 		}
 	}
+	grab_dist_min = 40;
+	grab_dist_max = 70;
+	if (currentFrame.fingers.length > 0 ){
+		var finger_dist =  p2.clone().sub(p1.clone());
+		finger_sep = finger_dist.length();
+		console.log(finger_sep);
+		if (finger_sep < grab_dist_min){
+			grab = true;
+		}
+		if (finger_sep > grab_dist_max){
+			grab = false;
+		}
+	}
+	else{grab = false;}
+	console.log(grab);
 	
 	if (currentFrame.fingers.length > 0 && grab == true){
 		var p3 = p2.clone().sub(p1.clone());
