@@ -155,30 +155,27 @@ function init()
 	ControlCube2 = new THREE.Mesh( cubeGeometry, wireMaterial );
 	ControlCube2.position.set(0, 50.1,100);
 	scene.add( ControlCube2 );
-
-	
 var materials = [
        new THREE.MeshBasicMaterial({
-           color: 0x9999ff
+           color: 0x8822ff
        }),
        new THREE.MeshBasicMaterial({
-           color: 0x444444
+           map: THREE.ImageUtils.loadTexture('static/bigredhacks.png')
        }),
        new THREE.MeshBasicMaterial({
-           color: 0xff0000
+           map: THREE.ImageUtils.loadTexture('static/75K_F9Ck.png')
        }),
        new THREE.MeshBasicMaterial({
-           color: 0x999990
+           map: THREE.ImageUtils.loadTexture('static/Nyan_cat_250px_frame.PNG')
        }),
        new THREE.MeshBasicMaterial({
-           color: 0x443414
+           map: THREE.ImageUtils.loadTexture('static/art-marilyn-470x469.jpg')
        }),
        new THREE.MeshBasicMaterial({
-           color: 0x8888ff
+           map: THREE.ImageUtils.loadTexture('static/gandalf.jpg')
+
        }),
     ];
-
-
 	
 	var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
 	var wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );

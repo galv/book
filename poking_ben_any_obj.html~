@@ -159,19 +159,19 @@ function init()
 	
 var materials = [
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/gandalf.jpg')
+           color: 0x9999ff
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/bigredhacks.png')
+           color: 0x444444
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/75K_F9Ck.png')
+           color: 0xff0000
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/Nyan_cat_250px_frame.PNG')
+           color: 0x999990
        }),
        new THREE.MeshBasicMaterial({
-           map: THREE.ImageUtils.loadTexture('static/art-marilyn-470x469.jpg')
+           color: 0x443414
        }),
        new THREE.MeshBasicMaterial({
            color: 0x8888ff
@@ -185,15 +185,9 @@ var materials = [
 	var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
 	
 	//wall = new THREE.Mesh(wallGeometry, wallMaterial);
-        var loader = new THREE.OBJLoader();
-        loader.load( 'static/cube.obj', function (object) {
-          object.name = "complex_object";
-          scene.add( object );
-        });
-	//wall = new THREE.Mesh(wallGeometry, new THREE.MeshFaceMaterial( materials ) );
-	//wall.position.set(50, 50, -50);
-	//scene.add(wall);
-        var wall = scene.getObjectByName("complex_object");
+	wall = new THREE.Mesh(wallGeometry, new THREE.MeshFaceMaterial( materials ) );
+	wall.position.set(50, 50, -50);
+	scene.add(wall);
 	collidableMeshList.push(wall);
 	//var wall = new THREE.Mesh(wallGeometry, wireMaterial);
 	//wall.position.set(100, 50, -100);
@@ -424,5 +418,3 @@ function findTransformation(p1, p2 , object){
 
 </body>
 </html>
-Status API Training Shop Blog About
-© 2014 GitHub, Inc. Terms Privacy Security Contact

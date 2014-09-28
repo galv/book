@@ -17,8 +17,12 @@
 <script src="js/THREEx.FullScreen.js"></script>
 <script src="js/THREEx.WindowResize.js"></script>
 <script src="http://js.leapmotion.com/leap-0.6.2.min.js"></script>
+<<<<<<< HEAD
+<script src="js/OBJLoader.js"></script>
+=======
 <script src="http://threejs.org/examples/js/loaders/OBJLoader.js"></script>
 
+>>>>>>> 463665f428796e5172d8f725c751064c5789da83
 <!-- jQuery code to display an information button and box when clicked. -->
 <script src="js/jquery-1.9.1.js"></script>
 <script src="js/jquery-ui.js"></script>
@@ -424,5 +428,3 @@ function findTransformation(p1, p2 , object){
 
 </body>
 </html>
-Status API Training Shop Blog About
-© 2014 GitHub, Inc. Terms Privacy Security Contact
