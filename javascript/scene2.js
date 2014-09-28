@@ -36,11 +36,23 @@
   material = new THREE.MeshPhongMaterial({
     color: scope.color
   });
-  
   collisionMesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), new THREE.MeshBasicMaterial({color: 0x000000, side: THREE.Backside}));
-  collisionMesh.position = scope.light1position;
-  scene.add(collisionMesh);
-  collidableMeshList = [collisionMesh];
+  var manager = new THREE.LoadingManager();
+  manager.onProgress = function ( item, loaded, total ) {
+    console.log( item, loaded, total );
+  };
+  var loader = new THREE.OBJLoader(manager);
+  loader.load( 'skull.obj', function ( collisionMesh ) {
+    collisionMesh.traverse( function ( child ){ 
+      if ( child instanceof THREE.Mesh ) {
+      //child.material.map = texture;
+      }
+    });
+    collisionMesh.scale = new THREE.Vector3( 20, 20, 20 );
+    collisionMesh.name = "skull";
+    scene.add( collisionMesh );
+  });
+  
 
   camera.position.fromArray([0, 3, 10]);
 
