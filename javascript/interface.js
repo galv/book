@@ -62,7 +62,7 @@
   var attached = [];
   var grab = false;
   var wait = 0; 
-  console.log(collisionMesh.position)
+  //console.log(collisionMesh.position)
   //Repeat loop / update
   controller.on('frame', function(frame) {
     var hand, handMesh, offsetDown, offsetForward, pos;
@@ -89,7 +89,7 @@
           if(attached.indexOf(index) == -1){
             attached.push(index);
           }
-          console.log(" Hit "+attached);
+          //console.log(" Hit "+attached);
         }
         /*else{
           var ind = attached.indexOf(index);
@@ -101,25 +101,25 @@
         }*/
         if(attached.length >= 2){
           grab = true;
-          console.log("grabbed");
+          //console.log("grabbed");
         } 
         else 
           grab = false;
           if (wait > 0)
             wait --;
       }
-      console.log(wait);
+      //console.log(wait);
     }
     var position2 = position1.clone().sub(position0.clone());
     if(position2.length() > 1.2 && grab){
         grab=false;
-        console.log(grab);
+        //console.log(grab);
         attached = [];
-        console.log(attached);
+        //console.log(attached);
         wait = 20;
       }
     if (frame.fingers.length > 0 && grab == true){
-      console.log(position2.length());
+      //console.log(position2.length());
       position2.normalize();
       var pos = new THREE.Vector3();
       pos.addVectors(position2, collisionMesh.position);
