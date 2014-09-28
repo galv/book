@@ -61,6 +61,14 @@
   //cube = new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.2), wireMaterial);
   //cubes = [new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2), new THREE.BoxGeometry(.2,.2,.2)];
   scene.add(light2);
+
+  var floorMaterial = new THREE.MeshBasicMaterial( {color:0x444444, side:THREE.DoubleSide} );
+  var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+  var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+  floor.position.y = -0.5;
+  floor.rotation.x = Math.PI / 2;
+  scene.add(floor);
+
   console.log("Scene finished");
   render = function() {
     if (!paused) {
